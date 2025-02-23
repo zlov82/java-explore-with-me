@@ -1,14 +1,25 @@
 services:
   stats-server:
+    build: stats/stats-server
+    container_name: stats-server-container
     ports:
       - "9090:9090"
+    depends_on:
+      - stats-db
 
   stats-db:
     image: postgres:16.1
-
-  ewm-service:
+    container_name: postgress-db-container
     ports:
-      - "8080:8080"
+      - "7032:5432"
+    environment:
+      - POSTGRES_DB=stat
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
 
-  ewm-db:
-    image: postgres:16.1
+#  ewm-service:
+#    ports:
+#      - "8080:8080"
+
+#  ewm-db:
+#    image: postgres:16.1

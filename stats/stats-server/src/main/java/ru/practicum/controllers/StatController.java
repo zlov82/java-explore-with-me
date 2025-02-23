@@ -24,10 +24,7 @@ public class StatController {
     private final StatService statService;
 
 
-    @Operation(summary = "Получение статистики по посещениям",
-            description = "Обратите внимание: значение даты и\n" +
-                    "        времени нужно закодировать (например используя\n" +
-                    "        java.net.URLEncoder.encode) ")
+    @Operation(summary = "Получение статистики по посещениям")
     @GetMapping("/stats")
     public List<ViewStatsResponseDto> getStats(
             @Parameter(description = "Начало периода в формате yyyy-MM-dd HH:mm:ss")

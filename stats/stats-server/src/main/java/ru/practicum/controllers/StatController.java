@@ -7,7 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.dto.EndpointHitRequestDto;
+import ru.practicum.dto.HitRequestDto;
 import ru.practicum.dto.ViewStatsResponseDto;
 import ru.practicum.models.Hit;
 import ru.practicum.services.StatService;
@@ -48,7 +48,7 @@ public class StatController {
     @Operation(summary = "Сохранение информации о том, что к эндпоинту был запрос")
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public void postHit(@RequestBody @Valid EndpointHitRequestDto requestHitDto) {
+    public void postHit(@RequestBody @Valid HitRequestDto requestHitDto) {
         Hit resp = statService.saveHit(requestHitDto);
     }
 

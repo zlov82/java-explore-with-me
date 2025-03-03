@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.StatMapper;
-import ru.practicum.dto.EndpointHitRequestDto;
+import ru.practicum.dto.HitRequestDto;
 import ru.practicum.dto.ViewStatsResponseDto;
 import ru.practicum.models.Hit;
 import ru.practicum.models.StatShortResponse;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class StatService {
     private final StatRepository repository;
 
-    public Hit saveHit(@Valid EndpointHitRequestDto requestHitDto) {
+    public Hit saveHit(@Valid HitRequestDto requestHitDto) {
         Hit newHit = StatMapper.toStatistic(requestHitDto);
         return repository.save(newHit);
     }

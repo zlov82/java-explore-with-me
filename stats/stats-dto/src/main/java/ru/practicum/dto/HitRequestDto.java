@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Schema(description = "Запрос на добавление статистики")
-public class EndpointHitRequestDto {
+public class HitRequestDto {
 
     @Schema(description = "Идентификатор сервиса для которого записывается информация"
             , example = "ewm-main-service")

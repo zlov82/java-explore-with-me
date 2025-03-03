@@ -1,12 +1,12 @@
 package ru.practicum;
 
-import ru.practicum.dto.EndpointHitRequestDto;
+import ru.practicum.dto.HitRequestDto;
 import ru.practicum.dto.ViewStatsResponseDto;
 import ru.practicum.models.Hit;
 import ru.practicum.models.StatShortResponse;
 
 public class StatMapper {
-    public static Hit toStatistic(EndpointHitRequestDto requestDto) {
+    public static Hit toStatistic(HitRequestDto requestDto) {
         return Hit.builder()
                 .app(requestDto.getApp())
                 .ip(requestDto.getIp())

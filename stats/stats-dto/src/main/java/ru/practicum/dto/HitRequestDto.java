@@ -16,24 +16,24 @@ import java.time.LocalDateTime;
 @Schema(description = "Запрос на добавление статистики")
 public class HitRequestDto {
 
-    @Schema(description = "Идентификатор сервиса для которого записывается информация"
-            , example = "ewm-main-service")
+    @Schema(description = "Идентификатор сервиса для которого записывается информация",
+            example = "ewm-main-service")
     @NotBlank
     private String app;
 
 
-    @Schema(description = "URI для которого был осуществлен запрос"
-            , example = "/events/1")
+    @Schema(description = "URI для которого был осуществлен запрос",
+            example = "/events/1")
     @NotBlank
     private String uri;
 
-    @Schema(description = "IP-адрес пользователя, осуществившего запрос"
-            , example = "192.163.0.1")
+    @Schema(description = "IP-адрес пользователя, осуществившего запрос",
+            example = "192.163.0.1")
     @NotBlank
     private String ip;
 
-    @Schema(description = "Дата и время, когда был совершен запрос к эндпоинту (в формате \"yyyy-MM-dd HH:mm:ss\")"
-            , example = "2022-09-06 11:00:23")
+    @Schema(description = "Дата и время, когда был совершен запрос к эндпоинту (в формате \"yyyy-MM-dd HH:mm:ss\")",
+            example = "2022-09-06 11:00:23")
     @PastOrPresent
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;

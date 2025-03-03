@@ -30,7 +30,7 @@ public class StatController {
             @Parameter(description = "Начало периода в формате yyyy-MM-dd HH:mm:ss")
             @RequestParam String start,
 
-            @Parameter(description = "Конец периода в формате yyyy-MM-dd HH:mm:ss\"")
+            @Parameter(description = "Конец периода в формате yyyy-MM-dd HH:mm:ss")
             @RequestParam String end,
 
             @RequestParam(required = false)

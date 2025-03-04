@@ -1,26 +1,17 @@
 package ru.practicum;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import ru.practicum.dto.HitRequestDto;
 import ru.practicum.dto.ViewStatsResponseDto;
 import ru.practicum.models.Hit;
 import ru.practicum.models.StatShortResponse;
 
-public class StatMapper {
-    public static Hit toStatistic(HitRequestDto requestDto) {
-        return Hit.builder()
-                .app(requestDto.getApp())
-                .ip(requestDto.getIp())
-                .uri(requestDto.getUri())
-                .localDateTime(requestDto.getTimestamp())
-                .build();
+@Mapper(componentModel = "spring")
+public interface StatMapper {
+    @Mapping(target = "localDateTime", source = "timestamp")
+    Hit toStatistic(HitRequestDto requestDto);
 
-    }
-
-    public static ViewStatsResponseDto toStatsResponseDto(StatShortResponse hit) {
-        return ViewStatsResponseDto.builder()
-                .app(hit.getApp())
-                .uri(hit.getUri())
-                .hits(hit.getViews())
-                .build();
-    }
+    @Mapping(target = "hits", source = "views")
+    ViewStatsResponseDto toStatsResponseDto(StatShortResponse hit);
 }

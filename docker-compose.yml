@@ -8,6 +8,8 @@ services:
       - stats-db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stat
+    restart: on-failure
+
 
   stats-db:
     image: postgres:16.1

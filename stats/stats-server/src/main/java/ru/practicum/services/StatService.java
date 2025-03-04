@@ -2,6 +2,7 @@ package ru.practicum.services;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.StatMapper;
 import ru.practicum.dto.HitRequestDto;
@@ -15,12 +16,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class StatService {
     private final StatRepository repository;
+    private final StatMapper statMapper;
 
     public Hit saveHit(@Valid HitRequestDto requestHitDto) {
-        Hit newHit = StatMapper.toStatistic(requestHitDto);
+        Hit newHit = statMapper.toStatistic(requestHitDto);
+        log.info("Service saveHit() hit: {}", newHit);
         return repository.save(newHit);
     }
 
@@ -41,8 +45,10 @@ public class StatService {
             }
         }
 
+        log.info("Service return getStatistics: {}", shortResponses);
+
         return shortResponses.stream()
-                .map(StatMapper::toStatsResponseDto)
+                .map(statMapper::toStatsResponseDto)
                 .collect(Collectors.toList());
     }
 }

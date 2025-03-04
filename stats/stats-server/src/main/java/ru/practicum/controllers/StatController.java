@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.HitRequestDto;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@Slf4j
 @RestController
 @Tag(name = "StatController")
 @RequiredArgsConstructor
@@ -42,6 +44,7 @@ public class StatController {
         String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
         LocalDateTime dateStart = LocalDateTime.parse(start, DateTimeFormatter.ofPattern(dateTimeFormat));
         LocalDateTime dateEnd = LocalDateTime.parse(end, DateTimeFormatter.ofPattern(dateTimeFormat));
+        log.info("Request Get '/stat' dateStart = {}, dateEnd = {}, uris = {}, unique = {}",dateStart, dateEnd, uris, unique);
         return statService.getStatistics(dateStart, dateEnd, uris, unique);
     }
 
@@ -49,6 +52,7 @@ public class StatController {
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
     public void postHit(@RequestBody @Valid HitRequestDto requestHitDto) {
+        log.info("Request Post '/hit' body: {} ", requestHitDto);
         Hit resp = statService.saveHit(requestHitDto);
     }
 

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 @Schema(description = "Запрос на добавление статистики")
 public class HitRequestDto {
 

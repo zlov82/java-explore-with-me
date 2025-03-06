@@ -1,6 +1,5 @@
 package ru.practicum.exceptions;
 
-import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,4 +35,31 @@ public class ErrorHandler {
 
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleNotFound(ConflictException e) {
+
+        ErrorResponse response = ErrorResponse.builder()
+                .status("CONFLICT")
+                .reason("For the requested operation the conditions are not met.")
+                .message(e.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleNotFound(BadRequestException e) {
+
+        ErrorResponse response = ErrorResponse.builder()
+                .status("BAD_REQUEST")
+                .reason("Плохой запрос")
+                .message(e.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }

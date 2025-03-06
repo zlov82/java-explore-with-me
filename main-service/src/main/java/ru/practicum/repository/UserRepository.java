@@ -1,6 +1,5 @@
 package ru.practicum.repository;
 
-import org.mapstruct.control.MappingControl;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.models.User;
@@ -26,5 +25,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
             LIMIT :size
             OFFSET :from
             """)
-    List<User> selectUsersWithIds(List<Long> ids,Long from, Long size);
+    List<User> selectUsersWithIds(List<Long> ids, Long from, Long size);
 }

@@ -20,11 +20,8 @@ public class UserService {
     }
 
     public void deleteUser(long userId) {
-        Optional<User> userToDelete = repository.findById(userId);
-        if (userToDelete.isEmpty()) {
-            throw new NotFoundException("User with id=" + userId + " was not found");
-        }
-        repository.delete(userToDelete.get());
+        User savedUser = this.getUser(userId);
+        repository.delete(savedUser);
     }
 
     public List<User> getUsers(List<Long> ids, Long from, Long size) {
@@ -32,5 +29,21 @@ public class UserService {
             return repository.selectUsersWithLimit(from, size);
         }
         return repository.selectUsersWithIds(ids, from, size);
+    }
+
+    public User getUserById(long id) {
+        return this.getUser(id);
+    }
+
+    private User getUser(long id) {
+        Optional<User> optUser = repository.findById(id);
+        if (optUser.isEmpty()) {
+            throw new NotFoundException("User with id=" + id + " was not found");
+        }
+        return optUser.get();
+    }
+
+    public List<User> getUsersByIds(List<Long> ids) {
+        return repository.findAllById(ids);
     }
 }

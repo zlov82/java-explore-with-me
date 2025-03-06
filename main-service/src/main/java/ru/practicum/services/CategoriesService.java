@@ -20,8 +20,8 @@ public class CategoriesService {
     }
 
     public void deleteById(int catId) {
-         Category category = this.getCategory(catId);
-         repository.delete(category);
+        Category category = this.getCategory(catId);
+        repository.delete(category);
     }
 
     public Category updateCategory(int catId, Category category) {
@@ -36,6 +36,10 @@ public class CategoriesService {
 
     public List<Category> getCategories(int from, int size) {
         return repository.selectCategoriesWithLimit(from, size);
+    }
+
+    public List<Category> getCategories(List<Integer> ids) {
+        return repository.findAllById(ids);
     }
 
     private Category getCategory(int id) {

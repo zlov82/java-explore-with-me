@@ -1,6 +1,5 @@
 package ru.practicum.mappers;
 
-import jakarta.validation.Valid;
 import org.mapstruct.Mapper;
 import ru.practicum.dto.UserCreateRequest;
 import ru.practicum.dto.UserCreateResponse;

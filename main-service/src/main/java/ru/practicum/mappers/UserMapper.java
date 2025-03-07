@@ -1,8 +1,8 @@
 package ru.practicum.mappers;
 
 import org.mapstruct.Mapper;
-import ru.practicum.dto.UserCreateRequest;
-import ru.practicum.dto.UserCreateResponse;
+import ru.practicum.dto.user.UserCreateRequest;
+import ru.practicum.dto.user.UserCreateResponse;
 import ru.practicum.models.User;
 
 import java.util.List;

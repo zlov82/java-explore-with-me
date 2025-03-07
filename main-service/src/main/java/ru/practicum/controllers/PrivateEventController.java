@@ -5,12 +5,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.dto.EventCreateRequest;
-import ru.practicum.dto.EventDto;
-import ru.practicum.dto.EventUpdateRequest;
+import ru.practicum.dto.ParticipationDto;
+import ru.practicum.dto.ParticipationUpdateByEventOwner;
+import ru.practicum.dto.ParticipationUpdateByEventOwnerRs;
+import ru.practicum.dto.event.EventCreateRequest;
+import ru.practicum.dto.event.EventDto;
+import ru.practicum.dto.event.EventUpdateRequest;
 import ru.practicum.mappers.EventMapper;
+import ru.practicum.mappers.ParticipationMapper;
 import ru.practicum.models.Event;
+import ru.practicum.models.Participation;
 import ru.practicum.services.EventService;
+import ru.practicum.services.ParticipationService;
 
 import java.util.List;
 
@@ -21,6 +27,8 @@ public class PrivateEventController {
 
     private final EventService service;
     private final EventMapper mapper;
+    private final ParticipationMapper participationMapper;
+    private final ParticipationService participationService;
 
     @GetMapping
     public ResponseEntity<List<EventDto>> getByUser(@PathVariable long userId,
@@ -40,11 +48,11 @@ public class PrivateEventController {
     }
 
     @GetMapping("/{eventId}/requests")
-    public ResponseEntity<Void> getXXX(@PathVariable long userId,
-                                       @PathVariable long eventId) {
-        //todo TBD -> Получение информации о запросах на участие в событии текущего пользователя
+    public ResponseEntity<List<ParticipationDto>> getParticipationByEventOwner(@PathVariable long userId,
+                                                                               @PathVariable long eventId) {
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        List<Participation> participationList = participationService.getUserEventRequest(userId, eventId);
+        return new ResponseEntity<>(participationMapper.toDto(participationList), HttpStatus.OK);
     }
 
 
@@ -64,12 +72,14 @@ public class PrivateEventController {
     }
 
     @PatchMapping("/{eventId}/requests")
-    private ResponseEntity<Void> updateXXX(@PathVariable long userId,
-                                           @PathVariable long eventId) {
+    private ResponseEntity<ParticipationUpdateByEventOwnerRs> updateParticipationByEventOwner(@PathVariable long userId,
+                                                                                                    @PathVariable long eventId,
+                                                                                                    @RequestBody ParticipationUpdateByEventOwner request) {
 
-        //todo TBD -> Изменение статуса заявков на участие в собитии текущего пользователя
+        ParticipationUpdateByEventOwnerRs rs = participationService.updateParticipationByEventOwner(userId,
+                eventId, request);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(rs, HttpStatus.OK);
     }
 
 }

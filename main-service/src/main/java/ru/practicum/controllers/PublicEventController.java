@@ -6,7 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.dto.EventDto;
+import ru.practicum.dto.event.EventDto;
 import ru.practicum.mappers.EventMapper;
 import ru.practicum.models.Event;
 import ru.practicum.services.EventService;

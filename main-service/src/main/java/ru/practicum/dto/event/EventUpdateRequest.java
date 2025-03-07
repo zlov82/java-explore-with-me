@@ -1,7 +1,8 @@
-package ru.practicum.dto;
+package ru.practicum.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import ru.practicum.dto.LocationDto;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +17,7 @@ public class EventUpdateRequest {
 
     private LocationDto location;
     private Boolean paid;
-    private Integer participantLimit;
+    private Long participantLimit;
     private Boolean requestModeration;
     private StateAction stateAction;
     private String title;

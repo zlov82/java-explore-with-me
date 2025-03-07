@@ -5,10 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.dto.EventCreateRequest;
-import ru.practicum.dto.EventState;
-import ru.practicum.dto.EventUpdateRequest;
-import ru.practicum.dto.StateAction;
+import ru.practicum.dto.event.*;
 import ru.practicum.exceptions.BadRequestException;
 import ru.practicum.exceptions.ConflictException;
 import ru.practicum.exceptions.NotFoundException;
@@ -39,6 +36,9 @@ public class EventService {
 
         log.info("create event {} by user {}", request, userId);
         Event event = eventMapper.toEvent(request);
+        if (event.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
+            throw new BadRequestException("Событие не может быть раньше, чем через два часа от текущего момента");
+        }
 
         User author = userService.getUserById(userId);
         Category category = categoriesService.getCategoryById(request.getCategory());
@@ -53,8 +53,9 @@ public class EventService {
 
     public List<Event> getPrivateEventsByUser(long userId, int from, int size) {
         User user = userService.getUserById(userId);
-        return eventRepo.selectEvents(user, from, size);
+        return eventRepo.selectEventsByUserWithSizeAndOffset(user, from, size);
     }
+
 
     public List<Event> getPublicEvents(String text, List<Integer> categories, Boolean paid, LocalDateTime rangeStart,
                                        LocalDateTime rangeEnd, Boolean onlyAvailable, EventService sort, Integer from, Integer size) {
@@ -147,8 +148,12 @@ public class EventService {
         return this.updateEvent(event, request);
     }
 
+    public Event getEventById(long id) {
+        return this.getById(id);
+    }
+
     private Event getById(long id) {
-        return eventRepo.findById(id).orElseThrow(
+        return eventRepo.findFullEventById(id).orElseThrow(
                 () -> new NotFoundException("Не найдено событие id=" + id)
         );
     }

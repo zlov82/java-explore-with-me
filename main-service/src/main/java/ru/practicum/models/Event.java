@@ -2,10 +2,11 @@ package ru.practicum.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.practicum.dto.EventState;
+import ru.practicum.dto.event.EventState;
 import ru.practicum.exceptions.ConflictException;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -47,7 +48,7 @@ public class Event {
     private Boolean paid;
 
     @Column(name = "participant_limit")
-    private Integer participantLimit;
+    private Long participantLimit;
 
     @Column(name = "request_moderation")
     private Boolean requestModeration;
@@ -62,6 +63,26 @@ public class Event {
     @Enumerated(EnumType.STRING)
     private EventState state = EventState.PENDING;
 
+    @Transient
+    private Long confirmedRequests;
+
+    public Event(Event e, long confirmedRequests) {
+        this.id = e.id;
+        this.title = e.title;
+        this.annotation = e.annotation;
+        this.category = e.category;
+        this.initiator = e.initiator;
+        this.description = e.description;
+        this.eventDate = e.eventDate;
+        this.location = e.location;
+        this.paid = e.paid;
+        this.participantLimit = e.participantLimit;
+        this.requestModeration = e.requestModeration;
+        this.state = e.state;
+        this.createdOn = e.createdOn;
+        this.publishedOn = e.publishedOn;
+        this.confirmedRequests = confirmedRequests;
+    }
 
     public void setState(EventState newState) {
         if (newState.equals(EventState.PUBLISHED) && !state.equals(EventState.PENDING)) {
@@ -79,4 +100,11 @@ public class Event {
             publishedOn = LocalDateTime.now();
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Event event)) return false;
+        return Objects.equals(id, event.id);
+    }
+
 }

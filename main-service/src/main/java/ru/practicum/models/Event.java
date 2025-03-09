@@ -66,6 +66,9 @@ public class Event {
     @Transient
     private Long confirmedRequests;
 
+    @Transient
+    private Long views;
+
     public Event(Event e, long confirmedRequests) {
         this.id = e.id;
         this.title = e.title;

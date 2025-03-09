@@ -1,6 +1,7 @@
 package ru.practicum.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import ru.practicum.dto.CategoryCreateResponse;
 import ru.practicum.dto.LocationDto;
@@ -30,8 +31,11 @@ public class EventDto {
     private EventState state;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime publishedOn;
 
     private Boolean requestModeration;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long views;
 }

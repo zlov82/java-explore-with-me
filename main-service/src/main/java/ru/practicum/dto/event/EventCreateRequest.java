@@ -31,6 +31,7 @@ public class EventCreateRequest {
 
     private LocationDto location;
     private Boolean paid = false;
+
     @PositiveOrZero
     private Integer participantLimit = 0;
     private Boolean requestModeration = true;

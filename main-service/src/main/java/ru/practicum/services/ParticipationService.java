@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.dto.ParticipationStatus;
 import ru.practicum.dto.ParticipationUpdateByEventOwner;
 import ru.practicum.dto.ParticipationUpdateByEventOwnerRs;
+import ru.practicum.dto.ParticipationUpdateStatus;
 import ru.practicum.dto.event.EventState;
 import ru.practicum.exceptions.ConflictException;
 import ru.practicum.exceptions.NotFoundException;
@@ -36,7 +37,7 @@ public class ParticipationService {
             throw new ConflictException("инициатор события не может добавить запрос на участие в своём событии");
         }
 
-        if (event.getConfirmedRequests().equals(event.getParticipantLimit())) {
+        if (event.getConfirmedRequests() != 0 && event.getConfirmedRequests().equals(event.getParticipantLimit())) {
             throw new ConflictException("У события достигнут лимит запросов на участие ");
         }
 
@@ -44,7 +45,7 @@ public class ParticipationService {
         participation.setEvent(event);
         participation.setRequester(user);
 
-        if (!event.getRequestModeration()) {
+        if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
             participation.setStatus(ParticipationStatus.CONFIRMED);
         }
 
@@ -84,10 +85,10 @@ public class ParticipationService {
 
         if (event.getParticipantLimit() != 0 && event.getRequestModeration()) {
 
-/*            if (request.getStatus() == ParticipationUpdateStatus.CONFIRMED &&
+            if (request.getStatus() == ParticipationUpdateStatus.CONFIRMED &&
                     event.getConfirmedRequests() + participationList.size() > event.getParticipantLimit()) {
                 throw new ConflictException("Достигнут лимит по заявкам на данное событие");
-            }*/
+            }
 
             for (Participation participation : participationList) {
                 if (!participation.getEvent().equals(event)) {
@@ -137,6 +138,15 @@ public class ParticipationService {
         List<Participation> confirmedRequests = repository.findAllByEventAndStatus(event, ParticipationStatus.CONFIRMED);
         List<Participation> rejectedRequests = repository.findAllByEventAndStatus(event, ParticipationStatus.REJECTED);
 
-        return new ParticipationUpdateByEventOwnerRs(mapper.toDto(confirmedRequests),mapper.toDto(rejectedRequests));
+        return new ParticipationUpdateByEventOwnerRs(mapper.toDto(confirmedRequests), mapper.toDto(rejectedRequests));
+    }
+
+    public List<Participation> getUserRequests(long userId) {
+        User user = userService.getUserById(userId);
+        List<Participation> requestList = repository.findAllByRequester(user);
+
+        return requestList.stream()
+                .filter(p -> !p.getEvent().getInitiator().equals(user))
+                .toList();
     }
 }

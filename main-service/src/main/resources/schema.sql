@@ -65,6 +65,9 @@ CREATE TABLE IF NOT EXISTS participations (
     created_on TIMESTAMP WITHOUT TIME ZONE NOT NULL,
 
     CONSTRAINT pk_participation PRIMARY KEY (id),
+
+    CONSTRAINT participations_unique UNIQUE (event_id,requester_id),
+
     CONSTRAINT participations_requester_fk
         FOREIGN KEY(requester_id)
             REFERENCES users(id)

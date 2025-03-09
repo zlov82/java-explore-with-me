@@ -9,12 +9,22 @@ import ru.practicum.mappers.ParticipationMapper;
 import ru.practicum.models.Participation;
 import ru.practicum.services.ParticipationService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users/{userId}/requests")
 @RequiredArgsConstructor
 public class PrivateParticipationController {
     private final ParticipationService service;
     private final ParticipationMapper mapper;
+
+
+    @GetMapping
+    public ResponseEntity<List<ParticipationDto>> getPrivateParticipation(@PathVariable long userId) {
+
+        List<Participation> participationList = service.getUserRequests(userId);
+        return new ResponseEntity<>(mapper.toDto(participationList), HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<ParticipationDto> create(@PathVariable long userId,

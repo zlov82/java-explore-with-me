@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import ru.practicum.dto.ParticipationStatus;
 import ru.practicum.models.Event;
 import ru.practicum.models.Participation;
+import ru.practicum.models.User;
 
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface ParticipationRepository extends JpaRepository<Participation, Lo
 
 
     List<Participation> findAllByEventAndStatus(Event event, ParticipationStatus participationStatus);
+
+    List<Participation> findAllByRequester(User user);
 }

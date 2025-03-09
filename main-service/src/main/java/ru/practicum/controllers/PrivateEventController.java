@@ -66,15 +66,15 @@ public class PrivateEventController {
     @PatchMapping("/{eventId}")
     private ResponseEntity<EventDto> update(@PathVariable long userId,
                                             @PathVariable long eventId,
-                                            @RequestBody EventUpdateRequest request) {
+                                            @Valid @RequestBody EventUpdateRequest request) {
         Event event = service.updateEventByUser(userId, eventId, request);
         return new ResponseEntity<>(mapper.toEventDto(event), HttpStatus.OK);
     }
 
     @PatchMapping("/{eventId}/requests")
     private ResponseEntity<ParticipationUpdateByEventOwnerRs> updateParticipationByEventOwner(@PathVariable long userId,
-                                                                                                    @PathVariable long eventId,
-                                                                                                    @RequestBody ParticipationUpdateByEventOwner request) {
+                                                                                              @PathVariable long eventId,
+                                                                                              @Valid @RequestBody ParticipationUpdateByEventOwner request) {
 
         ParticipationUpdateByEventOwnerRs rs = participationService.updateParticipationByEventOwner(userId,
                 eventId, request);

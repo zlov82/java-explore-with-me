@@ -1,5 +1,6 @@
 package ru.practicum.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ public class AdminEventController {
 
     @PatchMapping("/{eventId}")
     public ResponseEntity<EventDto> updateEventByAdmin(@PathVariable long eventId,
-                                                       @RequestBody EventUpdateRequest request) {
+                                                       @Valid @RequestBody EventUpdateRequest request) {
         Event event = service.updateEventByAdmin(eventId, request);
         return new ResponseEntity<>(mapper.toEventDto(event), HttpStatus.OK);
     }

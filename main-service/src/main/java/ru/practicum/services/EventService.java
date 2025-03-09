@@ -5,7 +5,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.dto.ViewStatsResponseDto;
 import ru.practicum.dto.event.*;
+import ru.practicum.ewm.client.StatsClient;
 import ru.practicum.exceptions.BadRequestException;
 import ru.practicum.exceptions.ConflictException;
 import ru.practicum.exceptions.NotFoundException;
@@ -18,18 +20,23 @@ import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.LocationRepository;
 
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class EventService {
-
+    private static final LocalDateTime VIEWS_FROM = LocalDateTime.of(1970, Month.JANUARY, 1, 0, 0, 0);
     private final UserService userService;
     private final CategoriesService categoriesService;
     private final EventRepository eventRepo;
     private final LocationRepository locationRepo;
     private final EventMapper eventMapper;
+    private final StatsClient statsClient;
 
     @Transactional
     public Event createEvent(@Valid EventCreateRequest request, long userId) {
@@ -58,7 +65,7 @@ public class EventService {
 
 
     public List<Event> getPublicEvents(String text, List<Integer> categories, Boolean paid, LocalDateTime rangeStart,
-                                       LocalDateTime rangeEnd, Boolean onlyAvailable, EventService sort, Integer from, Integer size) {
+                                       LocalDateTime rangeEnd, Boolean onlyAvailable, EventSearch sort, Integer from, Integer size) {
 
         if (text != null) {
             text = text.toLowerCase().trim();
@@ -77,25 +84,36 @@ public class EventService {
         }
 
         List<Event> nonSortedEvents = eventRepo.findTextInEventsWithParams(text, categories, paid, rangeStart, rangeEnd);
-        //todo обращение в статистику
 
-        //todo вставить сортиорку и оффсет
+        this.getEventsViews(nonSortedEvents);
 
+        Comparator<Event> comp = switch (sort) {
+            case EVENT_DATE -> Comparator.comparing(Event::getEventDate);
+            case VIEWS -> Comparator.comparing(Event::getViews);
+        };
 
-        return nonSortedEvents;
+        return nonSortedEvents.stream()
+                .sorted(comp)
+                .skip(from)
+                .limit(size)
+                .toList();
+
     }
 
     public List<Event> getEventsByAdmin(List<Long> userIds, List<String> states, List<Integer> categoryIds,
                                         LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size) {
 
-
-        return eventRepo.findAllByParams(userIds, categoryIds, states, rangeStart, rangeEnd, size, from);
+        List<Event> events = eventRepo.findAllByParams(userIds, categoryIds, states, rangeStart, rangeEnd, size, from);
+        return this.getEventsViews(events);
     }
 
+
     public Event getPublicEventById(long id) {
-        return eventRepo.findByIdAndState(id, EventState.PUBLISHED).orElseThrow(
+        Event event = eventRepo.findByIdAndState(id, EventState.PUBLISHED).orElseThrow(
                 () -> new NotFoundException("Опубликованного события с id=" + id + "не найдено")
         );
+        return this.getEventsViews(List.of(event)).getFirst();
+
     }
 
     public Event getPrivateEventById(long userId, long eventId) {
@@ -201,4 +219,20 @@ public class EventService {
 
         return eventRepo.save(event);
     }
+
+    private List<Event> getEventsViews(List<Event> events) {
+
+        List<String> eventsIds = events.stream()
+                .map(event -> "/events/" + event.getId())
+                .collect(Collectors.toList());
+
+        Map<String, Long> mapOfViews = statsClient.getStats(VIEWS_FROM, LocalDateTime.now(), eventsIds, true).
+                stream().collect(Collectors.toMap(ViewStatsResponseDto::getUri, ViewStatsResponseDto::getHits));
+
+        events.forEach(event -> event.setViews(mapOfViews.getOrDefault("/events/" + event.getId(), 0L)));
+
+        return events;
+    }
+
+
 }

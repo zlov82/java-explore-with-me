@@ -110,4 +110,12 @@ public class Event {
         return Objects.equals(id, event.id);
     }
 
+    //to spotbagFix HE_EQUALS_USE_HASHCODE
+    //https://spotbugs.readthedocs.io/en/stable/bugDescriptions.html
+    @Override
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42;
+    }
+
 }

@@ -9,6 +9,7 @@ import ru.practicum.models.User;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
 
@@ -89,4 +90,14 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             GROUP BY e
             """)
     Optional<Event> findFullEventById(long id);
+
+    @Query("""
+            SELECT new Event(e, COUNT(p.id))
+            FROM Event e
+            LEFT JOIN Participation p ON p.event = e AND p.status = 'CONFIRMED'
+            WHERE e.id IN :ids
+            GROUP BY e
+            """)
+    List<Event> findFullEventByIds(Set<Long> ids);
+
 }

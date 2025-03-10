@@ -24,6 +24,7 @@ import java.time.Month;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -115,6 +116,7 @@ public class EventService {
         return this.getEventsViews(List.of(event)).getFirst();
 
     }
+
 
     public Event getPrivateEventById(long userId, long eventId) {
         User user = userService.getUserById(userId);
@@ -235,4 +237,7 @@ public class EventService {
     }
 
 
+    public List<Event> getEventsByIds(Set<Long> events) {
+        return this.getEventsViews(eventRepo.findFullEventByIds(events));
+    }
 }

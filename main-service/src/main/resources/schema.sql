@@ -78,3 +78,25 @@ CREATE TABLE IF NOT EXISTS participations (
             REFERENCES events(id)
                 ON DELETE CASCADE
 );
+
+
+CREATE TABLE IF NOT EXISTS compilations (
+	id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+	title varchar NOT NULL,
+	pinned boolean NOT NULL,
+	CONSTRAINT compilations_pk PRIMARY KEY (id),
+	CONSTRAINT compilations_unique UNIQUE (title)
+);
+
+
+CREATE TABLE IF NOT EXISTS compilations_events (
+	id_compilation bigint NOT NULL,
+	id_event bigint NOT NULL,
+	CONSTRAINT compilations_events_compilations_fk FOREIGN KEY (id_compilation) REFERENCES public.compilations(id),
+	CONSTRAINT compilations_events_events_fk FOREIGN KEY (id_event) REFERENCES public.events(id)
+);
+
+
+
+
+

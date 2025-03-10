@@ -8,6 +8,7 @@ import ru.practicum.ewm.client.StatsClient;
 public class App {
     @Bean
     public StatsClient statsClient() {
-        return new StatsClient("http://localhost:9090");  // или инициализация через конструктор
+        //return new StatsClient("http://localhost:9090");  // или инициализация через конструктор
+        return new StatsClient("http://stats-server-container:9090");  // или инициализация через конструктор
     }
 }

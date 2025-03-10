@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.HitRequestDto;
 import ru.practicum.dto.ViewStatsResponseDto;
+import ru.practicum.exception.BadRequestException;
 import ru.practicum.models.Hit;
 import ru.practicum.services.StatService;
 
@@ -44,6 +45,9 @@ public class StatController {
         String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
         LocalDateTime dateStart = LocalDateTime.parse(start, DateTimeFormatter.ofPattern(dateTimeFormat));
         LocalDateTime dateEnd = LocalDateTime.parse(end, DateTimeFormatter.ofPattern(dateTimeFormat));
+        if (dateStart.isAfter(dateEnd)) {
+            throw new BadRequestException("dateStart позже dateEnd");
+        }
         log.info("Request Get '/stat' dateStart = {}, dateEnd = {}, uris = {}, unique = {}", dateStart, dateEnd, uris, unique);
         List<ViewStatsResponseDto> rs = statService.getStatistics(dateStart, dateEnd, uris, unique);
         log.info("Response Get /stat: {}", rs);

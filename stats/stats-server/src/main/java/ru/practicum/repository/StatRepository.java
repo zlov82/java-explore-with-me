@@ -15,7 +15,7 @@ public interface StatRepository extends JpaRepository<Hit, Long> {
             SELECT app as app, uri as uri, COUNT(DISTINCT ip) AS views FROM Hit
             WHERE 1=1
             AND uri IN :uris
-            AND (localDateTime >= :start AND localDateTime < :end)
+            AND localDateTime BETWEEN :start AND :end
             GROUP BY app, uri
             ORDER BY views DESC
             """)
@@ -26,7 +26,7 @@ public interface StatRepository extends JpaRepository<Hit, Long> {
     @Query("""
             SELECT app as app, uri as uri, COUNT(DISTINCT ip) AS views FROM Hit
             WHERE 1=1
-            AND (localDateTime >= :start AND localDateTime < :end)
+            AND localDateTime BETWEEN :start AND :end
             GROUP BY app, uri
             ORDER BY views DESC
             """)
@@ -38,7 +38,7 @@ public interface StatRepository extends JpaRepository<Hit, Long> {
             SELECT app as app, uri as uri, COUNT(ip) AS views FROM Hit
             WHERE 1=1
             AND uri IN :uris
-            AND (localDateTime >= :start AND localDateTime < :end)
+            AND localDateTime BETWEEN :start AND :end
             GROUP BY app, uri
             ORDER BY views DESC
             """)
@@ -49,7 +49,7 @@ public interface StatRepository extends JpaRepository<Hit, Long> {
     @Query("""
             SELECT app as app, uri as uri, COUNT(ip) AS views FROM Hit
             WHERE 1=1
-            AND (localDateTime >= :start AND localDateTime < :end)
+            AND localDateTime BETWEEN :start AND :end
             GROUP BY app, uri
             ORDER BY views DESC
             """)

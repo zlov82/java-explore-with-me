@@ -3,9 +3,11 @@ package ru.practicum.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @Builder
+@ToString
 @Schema(description = "Ответ статистики")
 public class ViewStatsResponseDto {
     @Schema(description = "Название сервиса", example = "ewm-main-service")

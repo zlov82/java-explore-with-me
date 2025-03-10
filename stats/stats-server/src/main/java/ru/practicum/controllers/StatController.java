@@ -44,8 +44,10 @@ public class StatController {
         String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
         LocalDateTime dateStart = LocalDateTime.parse(start, DateTimeFormatter.ofPattern(dateTimeFormat));
         LocalDateTime dateEnd = LocalDateTime.parse(end, DateTimeFormatter.ofPattern(dateTimeFormat));
-        log.info("Request Get '/stat' dateStart = {}, dateEnd = {}, uris = {}, unique = {}",dateStart, dateEnd, uris, unique);
-        return statService.getStatistics(dateStart, dateEnd, uris, unique);
+        log.info("Request Get '/stat' dateStart = {}, dateEnd = {}, uris = {}, unique = {}", dateStart, dateEnd, uris, unique);
+        List<ViewStatsResponseDto> rs = statService.getStatistics(dateStart, dateEnd, uris, unique);
+        log.info("Response Get /stat: {}", rs);
+        return rs;
     }
 
     @Operation(summary = "Сохранение информации о том, что к эндпоинту был запрос")

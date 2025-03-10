@@ -4,6 +4,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.dto.HitRequestDto;
 import ru.practicum.dto.HitResponseDto;
@@ -14,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.StringJoiner;
 
+@Component
 public class StatsClient {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final RestTemplate restTemplate;
@@ -49,7 +51,8 @@ public class StatsClient {
         queryString.add("unique=" + unique);
 
         ResponseEntity<List<ViewStatsResponseDto>> response = restTemplate
-                .exchange("/stats?" + queryString, HttpMethod.GET, null, new ParameterizedTypeReference<List<ViewStatsResponseDto>>() {});
+                .exchange("/stats?" + queryString, HttpMethod.GET, null, new ParameterizedTypeReference<List<ViewStatsResponseDto>>() {
+                });
 
         return response.getBody();
     }

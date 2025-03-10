@@ -228,8 +228,9 @@ public class EventService {
                 .map(event -> "/events/" + event.getId())
                 .collect(Collectors.toList());
 
-        Map<String, Long> mapOfViews = statsClient.getStats(VIEWS_FROM, LocalDateTime.now(), eventsIds, true).
-                stream().collect(Collectors.toMap(ViewStatsResponseDto::getUri, ViewStatsResponseDto::getHits));
+        Map<String, Long> mapOfViews = statsClient.getStats(VIEWS_FROM, LocalDateTime.now(), eventsIds, true)
+                .stream()
+                .collect(Collectors.toMap(ViewStatsResponseDto::getUri, ViewStatsResponseDto::getHits));
 
         events.forEach(event -> event.setViews(mapOfViews.getOrDefault("/events/" + event.getId(), 0L)));
 

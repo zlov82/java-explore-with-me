@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class ParticipationDto {
-    private Long Id;
+    private Long id;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime created;

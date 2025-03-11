@@ -26,7 +26,7 @@ public class AdminCompilationController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<CreateCompilationRs> update(@PathVariable long id,
+    public ResponseEntity<CreateCompilationRs> update(@PathVariable Long id,
                                                       @Valid @RequestBody UpdateCompilationRq updateRequest) {
 
         Compilation compilation = service.update(id, updateRequest);
@@ -34,7 +34,7 @@ public class AdminCompilationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -22,14 +22,14 @@ public class PublicCategoriesController {
     private final CategoryMapper mapper;
 
     @GetMapping
-    public ResponseEntity<List<CategoryCreateResponse>> getAll(@RequestParam(required = false, defaultValue = "0") int from,
-                                                               @RequestParam(required = false, defaultValue = "10") int size) {
+    public ResponseEntity<List<CategoryCreateResponse>> getAll(@RequestParam(required = false, defaultValue = "0") Integer from,
+                                                               @RequestParam(required = false, defaultValue = "10") Integer size) {
         List<Category> categoryList = service.getCategories(from, size);
         return new ResponseEntity<>(mapper.toCategoryResponse(categoryList), HttpStatus.OK);
     }
 
     @GetMapping("/{catId}")
-    public ResponseEntity<CategoryCreateResponse> getOne(@PathVariable int catId) {
+    public ResponseEntity<CategoryCreateResponse> getOne(@PathVariable Integer catId) {
         Category category = service.getCategoryById(catId);
         return new ResponseEntity<>(mapper.toCategoryResponse(category), HttpStatus.OK);
     }

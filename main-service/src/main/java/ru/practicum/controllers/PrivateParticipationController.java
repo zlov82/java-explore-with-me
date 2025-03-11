@@ -20,22 +20,22 @@ public class PrivateParticipationController {
 
 
     @GetMapping
-    public ResponseEntity<List<ParticipationDto>> getPrivateParticipation(@PathVariable long userId) {
+    public ResponseEntity<List<ParticipationDto>> getPrivateParticipation(@PathVariable Long userId) {
 
         List<Participation> participationList = service.getUserRequests(userId);
         return new ResponseEntity<>(mapper.toDto(participationList), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ParticipationDto> create(@PathVariable long userId,
-                                                   @RequestParam long eventId) {
+    public ResponseEntity<ParticipationDto> create(@PathVariable Long userId,
+                                                   @RequestParam Long eventId) {
         Participation participation = service.create(userId, eventId);
         return new ResponseEntity<>(mapper.toDto(participation), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{requestId}/cancel")
-    private ResponseEntity<ParticipationDto> cancel(@PathVariable long userId,
-                                                    @PathVariable long requestId) {
+    private ResponseEntity<ParticipationDto> cancel(@PathVariable Long userId,
+                                                    @PathVariable Long requestId) {
         Participation participation = service.cancel(userId, requestId);
         return new ResponseEntity<>(mapper.toDto(participation), HttpStatus.OK);
     }

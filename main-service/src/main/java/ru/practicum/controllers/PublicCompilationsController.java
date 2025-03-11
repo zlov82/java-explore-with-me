@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/compilations")
 @RequiredArgsConstructor
-public class PublicCompilations {
+public class PublicCompilationsController {
     private final CompilationsService service;
     private final CompilationMapper mapper;
 
@@ -28,7 +28,7 @@ public class PublicCompilations {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CreateCompilationRs> getById(@PathVariable long id) {
+    public ResponseEntity<CreateCompilationRs> getById(@PathVariable Long id) {
         Compilation compilation = service.getById(id);
         return new ResponseEntity<>(mapper.toDto(compilation), HttpStatus.OK);
 

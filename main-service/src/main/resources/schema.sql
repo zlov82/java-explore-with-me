@@ -97,6 +97,19 @@ CREATE TABLE IF NOT EXISTS compilations_events (
 );
 
 
+CREATE TABLE IF NOT EXISTS followers (
+	id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+	user_id bigint NOT NULL,
+	follower_id bigint NOT NULL,
+	created TIMESTAMP without time zone NULL,
+	CONSTRAINT followers_pk PRIMARY KEY (id),
+	CONSTRAINT followers_unique UNIQUE (user_id,follower_id),
+	CONSTRAINT followers_users_fk FOREIGN KEY (user_id) REFERENCES users(id),
+	CONSTRAINT followers_users_fk_1 FOREIGN KEY (follower_id) REFERENCES users(id)
+);
+
+
+
 
 
 

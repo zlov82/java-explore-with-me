@@ -223,6 +223,9 @@ public class EventService {
     }
 
     private List<Event> getEventsViews(List<Event> events) {
+        if (events == null || events.isEmpty()) {
+            return List.of();
+        }
 
         List<String> eventsIds = events.stream()
                 .map(event -> "/events/" + event.getId())
@@ -240,5 +243,39 @@ public class EventService {
 
     public List<Event> getEventsByIds(Set<Long> events) {
         return this.getEventsViews(eventRepo.findFullEventByIds(events));
+    }
+
+    public List<Event> getFollowersEvents(List<User> followerList, LocalDateTime start,
+                                          LocalDateTime end, Integer size, Integer from) {
+        log.info("Service getFollowersEvents {} {} {} {} {}", followerList, start, end, size, from);
+        List<Long> userIds = followerList.stream().map(User::getId).toList();
+
+        if (start == null) {
+            start = LocalDateTime.now();
+            log.info("Выставили время начала на текущую дату");
+        }
+        List<Event> eventList = eventRepo.findAllByParams(userIds, null, List.of(EventState.PUBLISHED.toString()),
+                start, end, size, from);
+
+        log.info("Получили список событий {}", eventList);
+        return this.getEventsViews(eventList);
+
+    }
+
+    public List<Event> getMembersEvents(List<User> userLists, LocalDateTime start, LocalDateTime end, int size, int from) {
+
+        log.info("Service getMembersEvents {} {} {} {} {}", userLists, start, end, size, from);
+        List<Long> userIds = userLists.stream().map(User::getId).toList();
+
+        if (start == null) {
+            start = LocalDateTime.now();
+            log.info("Выставили время начала на текущую дату");
+        }
+        List<Event> eventList = eventRepo.findAllByParamsAndMemberIds(userIds, null, List.of(EventState.PUBLISHED.toString()),
+                start, end, size, from);
+
+        log.info("Получили список событий {}", eventList);
+        return this.getEventsViews(eventList);
+
     }
 }

@@ -46,6 +46,24 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             SELECT new Event(e, COUNT(p.id))
             FROM Event e
             LEFT JOIN Participation p ON p.event = e AND p.status = 'CONFIRMED'
+            WHERE 1=1
+            AND (:categoriesIds IS NULL OR e.category.id IN :categoriesIds)
+            AND (:states IS NULL OR e.state IN :states)
+            AND p.requester.id in :memberIds
+            AND (CAST(:start AS timestamp) IS NULL OR e.eventDate >= :start)
+            AND (CAST(:end AS timestamp) IS NULL OR e.eventDate <= :end)
+            GROUP BY e
+            ORDER BY e.eventDate DESC
+            LIMIT :size
+            OFFSET :from
+            """)
+    List<Event> findAllByParamsAndMemberIds(List<Long> memberIds, List<Integer> categoriesIds, List<String> states,
+                                            LocalDateTime start, LocalDateTime end, Integer size, Integer from);
+
+    @Query("""
+            SELECT new Event(e, COUNT(p.id))
+            FROM Event e
+            LEFT JOIN Participation p ON p.event = e AND p.status = 'CONFIRMED'
             WHERE (:text IS NULL OR LOWER(e.annotation) LIKE %:text% OR LOWER(e.description) LIKE %:text%)
             AND (:categories IS NULL OR e.category.id IN :categories)
             AND (:paid IS NULL OR e.paid = :paid)
